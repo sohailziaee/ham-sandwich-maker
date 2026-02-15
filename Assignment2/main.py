@@ -1,19 +1,33 @@
+# main.py
+
 import data
-from sandwich_maker import SandwichMaker
-from cashier import Cashier
+import sandwich_maker
+import cashier
 
-
-# Make an instance of other classes here
 resources = data.resources
 recipes = data.recipes
-sandwich_maker_instance = #####
-cashier_instance = ######
 
+sandwich_machine = sandwich_maker.SandwichMaker(resources)
+cash_register = cashier.Cashier()
 
+is_on = True
 
+while is_on:
+    choice = input("What would you like? (ham_sandwich): ")
 
-def main():
-    ###  write the rest of the codes ###
+    if choice == "off":
+        is_on = False
 
-if __name__=="__main__":
-    main()
+    elif choice == "report":
+        print(resources)
+
+    elif choice in recipes:
+        recipe = recipes[choice]
+        ingredients = recipe["ingredients"]
+        cost = recipe["cost"]
+
+        if sandwich_machine.check_resources(ingredients):
+            payment = cash_register.process_coins()
+
+            if cash_register.transaction_result(payment, cost):
+                sandwich_machine.make_sandwich(choice, ingredients)
